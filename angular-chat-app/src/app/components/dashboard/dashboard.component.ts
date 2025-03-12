@@ -12,8 +12,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
+
   channels: any[] = [];
   userId: string | null = null;
+  isAdmin: boolean = false;
+  userName: string | null = '';
 
   constructor(
     private channelService: ChannelService,
@@ -29,6 +32,10 @@ export class DashboardComponent {
         this.loadChannels();
       }
     });
+
+    this.userName = sessionStorage.getItem('userName');
+    this.userName === 'admin'
+      ? (this.isAdmin = true) : (this.isAdmin = false);
   }
 
   loadChannels() {
@@ -43,6 +50,15 @@ export class DashboardComponent {
         console.log('Joined channel successfully!');
       });
     }
+  }
+
+  goToAddChannel(){
+    this.router.navigate(['/addChannel']);
+  }
+
+  goToGroup(channelName: string){
+    const formatName = channelName.replace(/\s+/g, '');  
+    this.router.navigate([`/groupChat/${formatName}`]);
   }
 
   logout() {

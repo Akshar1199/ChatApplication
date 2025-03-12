@@ -1,0 +1,26 @@
+<div class="card">
+   <div class="card-header">
+      Add Channel
+   </div>
+   <div class="card-body">
+      <form [formGroup]="channelForm" (ngSubmit)="onChannelSave()">
+         <div class="mb-3">
+            <label for="name" class="form-label fw-semibold">Name:</label>
+            <input type="text" formControlName="name" class="form-control rounded-pill" id="name" autocomplete="name" placeholder="Enter name" name="name">
+            <div class="text-danger mt-1" *ngIf="channelForm.controls['name'].touched && channelForm.controls['name'].errors?.['required']">
+               <span>This field is required</span>
+            </div>
+         </div>
+         <div class="mb-3">
+            <label for="description" class="form-label fw-semibold">Description:</label>
+            <textarea formControlName="description" class="form-control rounded-pill" id="description" autocomplete="description" placeholder="Enter description" name="description"></textarea>
+            <div class="text-danger mt-1" *ngIf="channelForm.controls['description'].touched && channelForm.controls['description'].errors?.['required']">
+               <span>This field is required</span>
+            </div>
+         </div>
+         <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+         </div>
+         <button type="submit" [disabled]="channelForm.invalid" class="btn btn-primary w-50 rounded-pill" style="margin-left: 25%;">Add Channel</button>
+      </form>
+</div>

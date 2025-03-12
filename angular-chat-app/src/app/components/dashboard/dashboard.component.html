@@ -1,19 +1,29 @@
-<div>
-  <button class="btn btn-danger" (click)=logout()>Logout</button>
-</div>
+<nav class="navbar">
+  <div class="nav-container">
+    <h1 class="logo">ChatSphere</h1>
+
+    <div class="auth-section">
+      <button *ngIf="isAdmin" class="btn btn-primary" (click)="goToAddChannel()">Create Channel</button>
+      <p style="color: red;"> {{this.userName}} </p>
+      <button class="btn btn-danger logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</nav>
 
 <div class="channel-container">
   <h2>Available Channels</h2>
-
-  <div *ngFor="let channel of channels" class="channel-card">
-    <h3>{{ channel.name }}</h3>
-    <p>{{ channel.description }}</p>
-
-    <button *ngIf="userId && !channel.members.includes(userId)"
-            (click)="joinChannel(channel.id)">
-      Join Channel
-    </button>
-
-    <span *ngIf="userId && channel.members.includes(userId)">✅ Joined</span>
+  <div class="channels-grid">
+    <div *ngFor="let channel of channels" class="channel-card" (click)="goToGroup(channel.name)">
+      <h3>{{ channel.name }}</h3>
+      <p>{{ channel.description }}</p>
+      <button *ngIf="userId && !channel.members.includes(userId)"
+              (click)="joinChannel(channel.id)"
+              class="join-btn">
+        Join Channel
+      </button>
+      <span *ngIf="userId && channel.members.includes(userId)" class="joined">
+        ✅ Joined
+      </span>
+    </div>
   </div>
 </div>
