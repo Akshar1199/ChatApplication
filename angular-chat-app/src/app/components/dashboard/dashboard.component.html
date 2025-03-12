@@ -1,29 +1,28 @@
-<nav class="navbar">
-  <div class="nav-container">
-    <h1 class="logo">ChatSphere</h1>
-
-    <div class="auth-section">
-      <button *ngIf="isAdmin" class="btn btn-primary" (click)="goToAddChannel()">Create Channel</button>
-      <p style="color: red;"> {{this.userName}} </p>
-      <button class="btn btn-danger logout-btn" (click)="logout()">Logout</button>
+<div class="chat-layout">
+  <div class="channel-sidebar">
+    <h2>Channels</h2>
+    <div class="channels-list">
+      <div *ngFor="let channel of channels" class="channel-item" (click)="selectChannel(channel)">
+        <h3>{{ channel.name }}</h3>
+      </div>
     </div>
   </div>
-</nav>
 
-<div class="channel-container">
-  <h2>Available Channels</h2>
-  <div class="channels-grid">
-    <div *ngFor="let channel of channels" class="channel-card" (click)="goToGroup(channel.name)">
-      <h3>{{ channel.name }}</h3>
-      <p>{{ channel.description }}</p>
-      <button *ngIf="userId && !channel.members.includes(userId)"
-              (click)="joinChannel(channel.id)"
-              class="join-btn">
-        Join Channel
-      </button>
-      <span *ngIf="userId && channel.members.includes(userId)" class="joined">
-        ✅ Joined
-      </span>
+  <div class="chat-container" *ngIf="selectedChannel">
+    <div class="chat-header">
+      <h2>{{ selectedChannel.name }}</h2>
+    </div>
+
+    <div class="chat-messages">
+      <div *ngFor="let message of messages" [ngClass]="{'my-message': message.senderId === userId, 'other-message': message.senderId !== userId}">
+        <p>{{ message.senderName }}: {{ message.text }}</p>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <input type="text" [(ngModel)]="messageText" placeholder="Type a message..." />
+      <input type="file" (change)="onFileSelected($event)" />
+      <button (click)="sendMessage()">Send</button>
     </div>
   </div>
 </div>
