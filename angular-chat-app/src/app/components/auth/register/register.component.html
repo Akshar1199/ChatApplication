@@ -7,6 +7,17 @@
       <form [formGroup]="userForm" (ngSubmit)="onUserSave()">
 
         <div class="mb-3">
+          <label for="userName" class="form-label fw-semibold">UserName:</label>
+          <input type="text" formControlName="userName" class="form-control rounded-pill"
+            id="userName" autocomplete="userName"
+            placeholder="Enter userName" name="userName">
+
+          <div class="text-danger mt-1" *ngIf="userForm.controls['userName'].touched && userForm.controls['userName'].errors?.['required']">
+            <span>This field is required</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
           <label for="email" class="form-label fw-semibold">Email:</label>
           <input type="text" formControlName="email" class="form-control rounded-pill"
             id="email" autocomplete="email"
@@ -14,6 +25,10 @@
 
           <div class="text-danger mt-1" *ngIf="userForm.controls['email'].touched && userForm.controls['email'].errors?.['required']">
             <span>This field is required</span>
+          </div>
+
+          <div class="text-danger mt-1" *ngIf="userForm.controls['email'].touched && userForm.controls['email'].errors?.['email']">
+            <span>Enter proper email format</span>
           </div>
         </div>
 

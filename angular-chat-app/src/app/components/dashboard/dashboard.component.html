@@ -1,0 +1,19 @@
+<div>
+  <button class="btn btn-danger" (click)=logout()>Logout</button>
+</div>
+
+<div class="channel-container">
+  <h2>Available Channels</h2>
+
+  <div *ngFor="let channel of channels" class="channel-card">
+    <h3>{{ channel.name }}</h3>
+    <p>{{ channel.description }}</p>
+
+    <button *ngIf="userId && !channel.members.includes(userId)"
+            (click)="joinChannel(channel.id)">
+      Join Channel
+    </button>
+
+    <span *ngIf="userId && channel.members.includes(userId)">✅ Joined</span>
+  </div>
+</div>
