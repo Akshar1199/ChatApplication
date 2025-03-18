@@ -1,0 +1,42 @@
+.channel-sidebar {
+  width: 25vw;
+  background: #16213e;
+  padding: 1rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-y: auto;
+  height: 90vh;
+
+}
+
+.channel-item {
+  padding: 10px;
+  border-bottom: 1px solid #ff5050;
+}
+
+.channel-item:hover {
+  background: #444444;
+  cursor: pointer;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .channel-sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .channels-list {
+    display: flex;
+    width: 100%;
+  }
+
+  .channel-item {
+    flex: 1;
+    text-align: center;
+  }
+}

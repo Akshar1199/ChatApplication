@@ -38,7 +38,7 @@ export class LoginComponent {
         console.log("User ID:", userCredential.user.uid);
         console.log("Username:", userName);
         sessionStorage.setItem('userName', userName);
-
+        sessionStorage.setItem('userId', userCredential.user.uid);
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {

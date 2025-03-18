@@ -1,0 +1,21 @@
+<div class="channel-sidebar">
+
+  <h2 class="text-center">
+    {{ isPrivateChat ? 'Private Chats' : 'Channels' }}
+  </h2>
+
+  <input *ngIf="isPrivateChat"
+    type="text"
+    class="form-control search-bar"
+    placeholder="Search..."
+    [(ngModel)]="searchText"
+    (ngModelChange)="onSearchChange()"
+  />
+
+
+  <div class="channels-list">
+    <div *ngFor="let item of items" class="channel-item" (click)="selectChannel(item)">
+      <h3>{{ isPrivateChat ? item.userName : item.name }}</h3>
+    </div>
+  </div>
+</div>

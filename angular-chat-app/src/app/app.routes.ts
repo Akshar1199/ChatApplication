@@ -1,11 +1,10 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
-import { ChatComponent } from './components/chat/chat.component';
-import { AuthGuard } from '@angular/fire/auth-guard';
+import { authGuard } from './guards/auth.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AddChannelComponent } from './components/admin/add-channel/add-channel.component';
-import { ChatPageComponent } from './components/admin/chat-page/chat-page.component';
+import { PrivateChatsComponent } from './components/private-chats/private-chats.component';
 
 export const routes: Routes = [
 
@@ -16,28 +15,27 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'chat',
-    component: ChatComponent,
-    canActivate: [AuthGuard]
+    canActivate: [authGuard]
   },
   {
     path: 'addChannel',
     component: AddChannelComponent,
+    canActivate: [authGuard]
   },
   {
-    path: 'groupChat/:channelName',
-    component: ChatPageComponent
+    path: 'app-private-chats',
+    component: PrivateChatsComponent,
+    canActivate: [authGuard]
   }
 ];

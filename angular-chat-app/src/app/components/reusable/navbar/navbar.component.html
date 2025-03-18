@@ -1,0 +1,25 @@
+<nav class="navbar">
+  <div class="container">
+    <a class="logo" routerLink="/dashboard">ChatWrap</a>
+    <button class="menu-toggle" (click)="toggleMenu()">☰</button>
+
+    <ul class="nav-links" [class.active]="isMenuOpen" *ngIf="userName">
+      <ng-container>
+        <p class="mt-1 text-light">👤 {{ userName }}</p>
+
+        <li>
+          <button class="btn text-light btn-outline-primary" routerLink="/app-private-chats">Private Chats</button>
+        </li>
+
+        <li *ngIf="isAdmin">
+          <button class="btn text-light btn-outline-primary" routerLink="/addChannel">Add Channel</button>
+        </li>
+
+        <li>
+          <button class="btn text-light btn-outline-danger" (click)="logout()">Logout</button>
+        </li>
+      </ng-container>
+
+    </ul>
+  </div>
+</nav>

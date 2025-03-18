@@ -1,5 +1,6 @@
-<div class="card">
-   <div class="card-header">
+<div class="d-flex h-75 justify-content-center align-items-center">
+<div class="card w-50">
+   <div class="card-header bg-warning text-center fw-bold">
       Add Channel
    </div>
    <div class="card-body">
@@ -13,7 +14,7 @@
          </div>
          <div class="mb-3">
             <label for="description" class="form-label fw-semibold">Description:</label>
-            <textarea formControlName="description" class="form-control rounded-pill" id="description" autocomplete="description" placeholder="Enter description" name="description"></textarea>
+            <textarea formControlName="description" class="form-control rounded-pill" id="description" autocomplete="description" placeholder="Enter description" name="description" style="resize: none;"></textarea>
             <div class="text-danger mt-1" *ngIf="channelForm.controls['description'].touched && channelForm.controls['description'].errors?.['required']">
                <span>This field is required</span>
             </div>
@@ -23,4 +24,5 @@
          </div>
          <button type="submit" [disabled]="channelForm.invalid" class="btn btn-primary w-50 rounded-pill" style="margin-left: 25%;">Add Channel</button>
       </form>
+</div>
 </div>

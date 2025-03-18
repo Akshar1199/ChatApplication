@@ -1,13 +1,30 @@
-import { CanActivateFn } from '@angular/router';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = (route:ActivatedRouteSnapshot, state) => {
 
-  const token = !!sessionStorage.getItem("userName");
+  const router = inject(Router);
+  const isLoggedIn = !!sessionStorage.getItem('userName');
 
-  if(token){
+  const routePath = route.url.map((segment) => segment.path).join('/');
+  console.log('Route Path:', routePath);
+
+  if (isLoggedIn) {
+
+    if (routePath === 'login' || routePath === 'register') {
+      alert('You are already logged in.');
+      router.navigate(['/dashboard']);
+      return false;
+    }
     return true;
   }
 
-  return false;
+  if (routePath !== 'login' && routePath !== 'register') {
+    alert('You need to log in first before accessing this page..');
+    router.navigate(['/login']);
+    return false;
+  }
+
+  return true;
 
 };

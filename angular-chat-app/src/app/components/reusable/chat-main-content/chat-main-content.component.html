@@ -1,0 +1,33 @@
+<div class="chat-container" *ngIf="selectedChannel">
+  <div class="chat-header">
+    <h2 class="d-flex text-center">{{ selectedChannel.name }}</h2>
+    <button *ngIf="isJoined && !isLoading" class="btn bg-danger" (click)="leaveChannel(selectedChannel.id)">Leave</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loader"></div>
+  </div>
+
+  <div *ngIf="!isJoined && !isLoading" class="join-container">
+    <p>You didn't join the channel.</p>
+    <button class="join-btn" (click)="joinChannel(selectedChannel.id)">Join the Channel</button>
+  </div>
+
+  <div class="chat-messages" *ngIf="isJoined">
+    <div *ngFor="let message of messages"
+      [ngClass]="{'my-message': message.senderId === userId, 'other-message': message.senderId !== userId}">
+      <p *ngIf="message.senderId === userId">You: {{ message.text }}</p>
+      <p *ngIf="message.senderId !== userId">{{ message.senderName }}: {{ message.text }}</p>
+    </div>
+  </div>
+
+  <div class="chat-input" *ngIf="isJoined && isAdmin; else noInput">
+    <input type="text" (keypress)="onKeyPress($event)" [(ngModel)]="messageText" placeholder="Type a message..." />
+    <input type="file" (change)="onFileSelected($event)" />
+    <button (click)="sendMessage()">Send</button>
+  </div>
+
+  <ng-template #noInput>
+    <p *ngIf="isJoined" class="info-text">Only Admin can send messages.</p>
+  </ng-template>
+</div>

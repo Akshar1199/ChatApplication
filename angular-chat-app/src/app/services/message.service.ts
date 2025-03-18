@@ -4,6 +4,7 @@ import { BehaviorSubject, from, Observable } from 'rxjs';
 
 export interface Message {
   senderId: string;
+  senderName: string;
   text?: string;
   timestamp: any;
   type: 'text' | 'image' | 'file';

@@ -32,8 +32,9 @@ ngOnInit() {
 
 onChannelSave() {
   console.log(this.channelForm.value);
-  this.channelServ.addChannel(this.channelForm.value.name, this.channelForm.value.description, this.adminId).subscribe({
+  this.channelServ.addChannel(this.channelForm.value.name, this.channelForm.value.description).subscribe({
     next: () => {
+      this.channelForm.reset();
       alert("Channel Added Successfully");
     },
     error: (error) => {
