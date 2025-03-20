@@ -24,7 +24,9 @@ export class PrivateChatsComponent {
       return;
     }
 
-    this.authServ.searchUsers(searchText).subscribe({
+    const userName = sessionStorage.getItem('userName') || '';
+
+    this.authServ.searchUsers(searchText, userName).subscribe({
       next: (users) => {
         console.log(this.users);
         this.users = users;

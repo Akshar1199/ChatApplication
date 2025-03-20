@@ -5,6 +5,7 @@ import { authGuard } from './guards/auth.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AddChannelComponent } from './components/admin/add-channel/add-channel.component';
 import { PrivateChatsComponent } from './components/private-chats/private-chats.component';
+import { RequestsComponent } from './components/requests/requests.component';
 
 export const routes: Routes = [
 
@@ -36,6 +37,11 @@ export const routes: Routes = [
   {
     path: 'app-private-chats',
     component: PrivateChatsComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'requests',
+    component: RequestsComponent,
     canActivate: [authGuard]
   }
 ];

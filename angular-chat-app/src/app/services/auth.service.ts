@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, UserCredential } from '@angular/fire/auth';
-import {Firestore,  doc, getDoc, setDoc, collection, getDocs } from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs';
+import {Firestore,  doc, getDoc, setDoc, collection, getDocs, onSnapshot, docData } from '@angular/fire/firestore';
+import { BehaviorSubject, from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,30 @@ import { from, Observable } from 'rxjs';
 
 export class AuthService {
 
+  private userData$ = new BehaviorSubject<any>(null);
+
   constructor(private auth: Auth, private firestore: Firestore) {}
+
+  listenForUserData(userId: string) {
+    if (!userId) return;
+
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+
+    onSnapshot(userDocRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        this.userData$.next(docSnapshot.data());
+      }
+    });
+  }
+
+  getUserData() {
+    return this.userData$.asObservable();
+  }
+
+  getUserById(userId: string): Observable<any> {
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+    return docData(userDocRef, { idField: 'id' });
+  }
 
   register(email: string, password: string, userName: string): Observable<any> {
     return from(
@@ -67,13 +90,16 @@ export class AuthService {
     );
   }
 
-  searchUsers(searchText: string): Observable<any[]> {
+  searchUsers(searchText: string, userName: string): Observable<any[]> {
     const usersCollection = collection(this.firestore, 'users');
     return from(
       getDocs(usersCollection).then((querySnapshot) => {
         const users: any[] = [];
         querySnapshot.forEach((doc) => {
           const userData = doc.data();
+          if (userData['userName'] === userName) {
+            return;
+          }
           if (userData['userName'].includes(searchText)) {
             users.push(userData);
           }
