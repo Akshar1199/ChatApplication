@@ -1,19 +1,39 @@
-<div class="card">
-  <div class="card-header">
-    <h2 class="text-center">Friend Incoming requests</h2>
+<div class="card shadow-lg">
+  <div class="card-header bg-primary text-white text-center">
+    <h2>Friend Incoming Requests</h2>
   </div>
 
   <div class="card-body">
-    <div *ngIf="incomingRequests.length === 0" class="text-center">
-      <p>No incomingRequests found.</p>
+    <div *ngIf="incomingRequests.length === 0" class="text-center text-muted">
+      <p>No incoming requests found.</p>
     </div>
 
-    <div *ngFor="let request of incomingRequests" class="request-item">
-      <div class="d-flex justify-content-between align-items-center">
-        <h3>{{ request.id }} </h3>
+    <div *ngFor="let request of incomingRequests" class="card mb-3 p-3 border">
+      <div class="d-flex align-items-center">
+        <!-- <img
+          *ngIf="request.profilePic"
+          [src]="request.profilePic"
+          alt="Profile"
+          class="rounded-circle me-3"
+          width="50"
+          height="50"
+        />
+        <img
+          *ngIf="!request.profilePic"
+          src="https://via.placeholder.com/50"
+          alt="Default Profile"
+          class="rounded-circle me-3"
+          width="50"
+          height="50"
+        /> -->
 
-        <div class="btn-group">
-          <!-- <button class="btn btn-sm btn-success" (click)="acceptRequest(request)">Accept</button> -->
+        <div class="flex-grow-1">
+          <h5 class="mb-1">{{ request.userName }}</h5>
+          <p class="text-muted mb-0">{{ request.email }}</p>
+        </div>
+
+        <div>
+          <button class="btn btn-sm btn-primary mx-2" (click)="acceptRequest(request)">Accept</button>
           <button class="btn btn-sm btn-danger" (click)="rejectRequest(request)">Reject</button>
         </div>
       </div>

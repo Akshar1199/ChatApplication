@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ChatSidebarComponent } from '../reusable/chat-sidebar/chat-sidebar.component';
 import { ChatMainContentComponent } from '../reusable/chat-main-content/chat-main-content.component';
 import { CommonModule } from '@angular/common';
@@ -14,8 +14,12 @@ import { AuthService } from '../../services/auth.service';
 export class PrivateChatsComponent {
 
   users: any[] = [];
+  selectedChannel: any = null;
+  messages: any[] = [];
 
   constructor(private authServ: AuthService){}
+
+  @ViewChild(ChatMainContentComponent) chatMainContent!: ChatMainContentComponent;
 
   searchUsers(searchText: string) {
 
@@ -28,7 +32,7 @@ export class PrivateChatsComponent {
 
     this.authServ.searchUsers(searchText, userName).subscribe({
       next: (users) => {
-        console.log(this.users);
+        // console.log(this.users);
         this.users = users;
       },
       error: (error) => {
@@ -37,8 +41,9 @@ export class PrivateChatsComponent {
     });
   }
 
-  selectedUser(user: any) {
-    console.log(user);
+  selectedUser(channel: any) {
+    this.selectedChannel = channel;
+    this.chatMainContent.selectChannel(this.selectedChannel);
   }
 
 }

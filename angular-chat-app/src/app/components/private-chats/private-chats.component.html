@@ -1,17 +1,17 @@
 <div class="chat-layout">
-  <div>
+  <div class="row">
     <div class="col-lg-3 col-md-4 col-sm-12">
       <app-chat-sidebar [items]="users" [isPrivateChat]="true" (searchQuery)="searchUsers($event)" (itemSelected)="selectedUser($event)"></app-chat-sidebar>
     </div>
 
     <div class="col-lg-9 col-md-8 col-sm-12 chat-main">
-      <!-- <app-chat-main-content
-        [selectedChannel]="selectedChannel"
+      <app-chat-main-content
+        [isPrivateChat]="true"
         [messages]="messages"
-        [isLoading]="isLoading"
-        [isAdmin]="isAdmin"
+        [isLoading]="false"
+        [isAdmin]="false"
       >
-      </app-chat-main-content> -->
+      </app-chat-main-content>
     </div>
 
   </div>

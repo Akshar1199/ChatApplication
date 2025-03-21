@@ -12,21 +12,28 @@
   />
 
   <div class="channels-list text-light">
-    <div *ngFor="let item of items" class="channel-item d-flex justify-content-between align-items-center" (click)="selectChannel(item)">
+    <div *ngFor="let item of items"
+         class="channel-item d-flex justify-content-between align-items-center"
+         (click)="selectChannel(item)">
+
       <h3 class="m-0">{{ isPrivateChat ? item.userName : item.name }}</h3>
 
       <div *ngIf="isPrivateChat" class="btn-group">
-        <button *ngIf="friends.includes(item.id)" class="btn btn-sm btn-danger" (click)="removeFriend(item)">
+        <button *ngIf="friends.includes(item.uid)"
+                class="btn btn-sm btn-danger"
+                (click)="removeFriend(item)">
           Remove Friend
         </button>
 
-        <button *ngIf="pendingRequests.includes(item.uid) && !friends.includes(item.id)"
-          class="btn btn-sm btn-warning" (click)="cancelFriendRequest(item)">
+        <button *ngIf="pendingRequests.includes(item.uid) && !friends.includes(item.uid)"
+                class="btn btn-sm btn-warning"
+                (click)="cancelFriendRequest(item)">
           Pending... (Cancel)
         </button>
 
-        <button *ngIf="!pendingRequests.includes(item.uid) && !friends.includes(item.id)"
-          class="btn btn-sm btn-primary" (click)="sendFriendRequest(item)">
+        <button *ngIf="!pendingRequests.includes(item.uid) && !friends.includes(item.uid)"
+                class="btn btn-sm btn-primary"
+                (click)="sendFriendRequest(item)">
           Send Request
         </button>
       </div>

@@ -1,6 +1,6 @@
 <div class="chat-container" *ngIf="selectedChannel">
   <div class="chat-header">
-    <h2 class="d-flex text-center">{{ selectedChannel.name }}</h2>
+    <h2 class="d-flex text-center"> {{ isPrivateChat ? selectedChannel?.userName : selectedChannel?.name }} </h2>
     <button *ngIf="isJoined && !isLoading" class="btn bg-danger" (click)="leaveChannel(selectedChannel.id)">Leave</button>
   </div>
 
@@ -8,26 +8,30 @@
     <div class="loader"></div>
   </div>
 
-  <div *ngIf="!isJoined && !isLoading" class="join-container">
+  <div *ngIf="!isPrivateChat && !isJoined && !isLoading" class="join-container">
     <p>You didn't join the channel.</p>
     <button class="join-btn" (click)="joinChannel(selectedChannel.id)">Join the Channel</button>
   </div>
 
-  <div class="chat-messages" *ngIf="isJoined">
+  <div class="chat-messages" *ngIf="isJoined || isPrivateChat">
     <div *ngFor="let message of messages"
       [ngClass]="{'my-message': message.senderId === userId, 'other-message': message.senderId !== userId}">
-      <p *ngIf="message.senderId === userId">You: {{ message.text }}</p>
-      <p *ngIf="message.senderId !== userId">{{ message.senderName }}: {{ message.text }}</p>
+
+      <p *ngIf="message.senderId === userId">
+        <span *ngIf="!isPrivateChat">You:</span> {{ message.text }}</p>
+        <!-- <span class="timestamp">{{ message.timestamp  }}</span> -->
+      <p *ngIf="message.senderId !== userId">
+        <span *ngIf="!isPrivateChat">{{ message.senderName }}:</span>{{ message.text }}
+      </p>
+      <span class="timestamp">{{ formatTimestamp(message.timestamp) | date : 'h:mm a, MMM d' }}</span>
+
+
     </div>
   </div>
 
-  <div class="chat-input" *ngIf="isJoined && isAdmin; else noInput">
+  <div class="chat-input" *ngIf="isJoined || isPrivateChat">
     <input type="text" (keypress)="onKeyPress($event)" [(ngModel)]="messageText" placeholder="Type a message..." />
     <input type="file" (change)="onFileSelected($event)" />
     <button (click)="sendMessage()">Send</button>
   </div>
-
-  <ng-template #noInput>
-    <p *ngIf="isJoined" class="info-text">Only Admin can send messages.</p>
-  </ng-template>
 </div>
