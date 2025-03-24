@@ -1,8 +1,10 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChannelService } from '../../../services/channel.service';
 import { MessageService, Message } from '../../../services/message.service';
+import { AuthService } from '../../../services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat-main-content',
@@ -19,24 +21,40 @@ export class ChatMainContentComponent {
   userName: string | null = null;
   isJoined: boolean = false;
   selectedChannel: any;
+  private userDataSubscription?: Subscription;
 
   adminUids: string[] = [];
   messageText: string = '';
 
-
   constructor(
     private channelService: ChannelService,
-    private msgServ: MessageService
+    private msgServ: MessageService,
+    private authService: AuthService
   ) {}
-
 
   ngOnInit() {
     this.userId = sessionStorage.getItem('userId');
     this.userName = sessionStorage.getItem('userName');
+
+    if (this.isPrivateChat && this.userId) {
+      this.userDataSubscription = this.authService.getUserData().subscribe(userData => {
+        if (userData && this.selectedChannel) {
+          const isFriendStillExists = userData.friends?.some((friend: any) => friend.uid === this.selectedChannel.uid);
+          if (!isFriendStillExists) {
+            this.closeChat();
+          }
+        }
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.userDataSubscription) {
+      this.userDataSubscription.unsubscribe();
+    }
   }
 
   sendMessage() {
-
     const message: Message = {
       senderId: this.userId!,
       senderName: this.userName!,
@@ -64,7 +82,6 @@ export class ChatMainContentComponent {
       });
     }
 
-
     else{
       if (!this.messageText?.trim()) {
         console.error('Cannot send an empty message');
@@ -78,9 +95,7 @@ export class ChatMainContentComponent {
         },
         error: (err) => console.error('Failed to send message:', err),
       });
-
     }
-
   }
 
   onKeyPress(event: any) {
@@ -158,5 +173,4 @@ export class ChatMainContentComponent {
   closeChat() {
     this.selectedChannel = null;
   }
-
 }

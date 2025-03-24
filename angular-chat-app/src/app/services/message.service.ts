@@ -101,20 +101,26 @@ export class MessageService {
     }
   }
 
-  getMessagesOfFriend(userId: string, friendId: string): void {
+  getMessagesOfFriend(userId: string, friendId: string): Observable<Message[]> {
     const userDocRef = doc(this.firestore, `users/${userId}`);
-    onSnapshot(userDocRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const userData = docSnap.data();
-        const friend = userData?.['friends']?.find((f: any) => f.uid === friendId);
-        if (friend) {
-          this.messagesSubject.next(friend.messages || []);
+    return new Observable<Message[]>(observer => {
+      const unsubscribe = onSnapshot(userDocRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          const friend = userData?.['friends']?.find((f: any) => f.uid === friendId);
+          if (friend) {
+            this.messagesSubject.next(friend.messages || []);
+            observer.next(friend.messages || []);
+          } else {
+            this.messagesSubject.next([]);
+            observer.next([]);
+          }
         } else {
           this.messagesSubject.next([]);
+          observer.next([]);
         }
-      } else {
-        this.messagesSubject.next([]);
-      }
+      });
+      return () => unsubscribe();
     });
   }
 
