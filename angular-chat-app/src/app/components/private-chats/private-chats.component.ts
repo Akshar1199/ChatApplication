@@ -14,7 +14,6 @@ import { AuthService } from '../../services/auth.service';
 export class PrivateChatsComponent {
 
   users: any[] = [];
-  selectedChannel: any = null;
   messages: any[] = [];
 
   constructor(private authServ: AuthService){}
@@ -42,8 +41,10 @@ export class PrivateChatsComponent {
   }
 
   selectedUser(channel: any) {
-    this.selectedChannel = channel;
-    this.chatMainContent.selectChannel(this.selectedChannel);
+    this.chatMainContent.selectChannel(channel);
   }
 
+  onCloseChat() {
+    this.chatMainContent.closeChat();
+  }
 }

@@ -154,4 +154,9 @@ export class ChatMainContentComponent {
   onFileSelected(event: any) {
     console.log('File selected:', event.target.files[0]);
   }
+
+  closeChat() {
+    this.selectedChannel = null;
+  }
+
 }

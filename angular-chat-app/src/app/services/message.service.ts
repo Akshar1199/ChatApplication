@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, arrayUnion, doc, getDoc, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, from, Observable } from 'rxjs';
+import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 
 export interface Message {
   senderId: string;
@@ -9,6 +10,8 @@ export interface Message {
   // timestamp: any;
   type: 'text' | 'image' | 'file';
   mediaUrl?: string;
+  fileName?: string;
+  fileType?: string;
 }
 
 @Injectable({
@@ -17,7 +20,10 @@ export interface Message {
 
 export class MessageService {
 
-  constructor(private firestore: Firestore) {}
+  constructor(
+    private firestore: Firestore,
+    private storage: Storage
+  ) {}
 
   private messagesSubject = new BehaviorSubject<Message[]>([]);
   messages$ = this.messagesSubject.asObservable();
@@ -125,5 +131,49 @@ export class MessageService {
     });
   }
 
+  async uploadFile(file: File, userId: string): Promise<string> {
+    const filePath = `chat-files/${userId}/${Date.now()}_${file.name}`;
+    const storageRef = ref(this.storage, filePath);
+
+    try {
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadUrl = await getDownloadURL(snapshot.ref);
+      return downloadUrl;
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      throw error;
+    }
+  }
+
+  async sendFileMessage(userId: string, friendId: string, file: File): Promise<void> {
+    try {
+      const downloadUrl = await this.uploadFile(file, userId);
+
+      const message: Message = {
+        senderId: userId,
+        senderName: sessionStorage.getItem('userName') || '',
+        // timestamp: new Date(),
+        type: this.getFileType(file.type),
+        mediaUrl: downloadUrl,
+        fileName: file.name,
+        fileType: file.type
+      };
+
+      return this.sendMessageToFriend(userId, friendId, message).toPromise();
+    } catch (error) {
+      console.error('Error sending file message:', error);
+      throw error;
+    }
+  }
+
+  private getFileType(mimeType: string): 'text' | 'image' | 'file' {
+    if (mimeType.startsWith('image/')) {
+      return 'image';
+    } else if (mimeType === 'application/pdf' || mimeType === 'text/plain') {
+      return 'text';
+    } else {
+      return 'file';
+    }
+  }
 
 }

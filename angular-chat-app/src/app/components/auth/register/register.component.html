@@ -1,59 +1,76 @@
-<div class="d-flex justify-content-center align-items-center" style="height:500px;">
-  <div class="card shadow-lg p-4" style="width: 45%; border-radius: 15px;">
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+  <div class="card shadow-lg p-4" style="width: 40%; border-radius: 15px;">
     <div class="card-header text-center text-white fw-bold" style="background: #1a240bed; border-radius: 10px 10px 0 0;">
       Register
     </div>
     <div class="card-body">
       <form [formGroup]="userForm" (ngSubmit)="onUserSave()">
 
+        <!-- Username -->
         <div class="mb-3">
-          <label for="userName" class="form-label fw-semibold">UserName:</label>
+          <label for="userName" class="form-label fw-semibold">Username:</label>
           <input type="text" formControlName="userName" class="form-control rounded-pill"
-            id="userName" autocomplete="userName"
-            placeholder="Enter userName" name="userName">
+            id="userName" autocomplete="username"
+            placeholder="Enter your username" name="userName">
 
           <div class="text-danger mt-1" *ngIf="userForm.controls['userName'].touched && userForm.controls['userName'].errors?.['required']">
             <span>This field is required</span>
           </div>
         </div>
 
+        <!-- Email -->
         <div class="mb-3">
           <label for="email" class="form-label fw-semibold">Email:</label>
-          <input type="text" formControlName="email" class="form-control rounded-pill"
+          <input type="email" formControlName="email" class="form-control rounded-pill"
             id="email" autocomplete="email"
-            placeholder="Enter email" name="email">
+            placeholder="Enter your email" name="email">
 
           <div class="text-danger mt-1" *ngIf="userForm.controls['email'].touched && userForm.controls['email'].errors?.['required']">
             <span>This field is required</span>
           </div>
 
           <div class="text-danger mt-1" *ngIf="userForm.controls['email'].touched && userForm.controls['email'].errors?.['email']">
-            <span>Enter proper email format</span>
+            <span>Please enter a valid email</span>
           </div>
         </div>
 
+        <!-- Password -->
         <div class="mb-3">
-          <label for="pwd" class="form-label fw-semibold">Password:</label>
+          <label for="password" class="form-label fw-semibold">Password:</label>
           <input type="password" formControlName="password" class="form-control rounded-pill"
-            id="pwd" autocomplete="current-password"
-            placeholder="Enter password">
+            id="password" autocomplete="new-password"
+            placeholder="Enter your password">
 
           <div class="text-danger mt-1" *ngIf="userForm.controls['password'].touched">
             <span *ngIf="userForm.controls['password'].errors?.['required']">This field is required</span>
-            <span *ngIf="userForm.controls['password'].errors?.['minlength']">Minimum length is 5 characters</span>
+            <span *ngIf="userForm.controls['password'].errors?.['minlength']">Password must be at least 5 characters</span>
           </div>
         </div>
 
-        <div *ngIf="errorMessage" class="alert alert-danger">
+        <!-- Profile Image Upload -->
+        <div class="mb-3">
+          <label for="profileImage" class="form-label fw-semibold">Profile Image (Optional):</label>
+          <input type="file" class="form-control rounded-pill" id="profileImage"
+            (change)="onFileSelected($event)" accept="image/*">
+
+
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="alert alert-danger text-center">
           {{ errorMessage }}
         </div>
 
-        <button type="submit" [disabled]="userForm.invalid"
-          class="btn btn-primary w-50 rounded-pill" style="margin-left: 25%;">Register</button>
+        <!-- Register Button -->
+        <div class="d-flex justify-content-center">
+          <button type="submit" [disabled]="userForm.invalid"
+            class="btn btn-primary w-50 rounded-pill">Register</button>
+        </div>
       </form>
 
+      <!-- Login Redirect -->
       <div class="text-center mt-3">
-        <span>Don't have an account? </span>
+        <span>Already have an account?</span>
         <a (click)="navigateToLogIn()" class="text-primary fw-bold" style="cursor: pointer;">Login Here</a>
       </div>
     </div>

@@ -10,6 +10,7 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,6 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideFunctions(() => getFunctions()),
     provideMessaging(() => getMessaging()),
     provideStorage(() => getStorage()),
+    provideHttpClient()
   ],
-  // hello by rucha
+  
 };

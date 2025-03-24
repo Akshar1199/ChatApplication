@@ -33,6 +33,7 @@ export class LoginComponent {
 
   onUserSave() {
     this.authServ.login(this.userForm.value.email, this.userForm.value.password).subscribe({
+
       next: ({ userCredential, userName }) => {
         alert("Login Successfully");
         console.log("User ID:", userCredential.user.uid);
@@ -42,6 +43,8 @@ export class LoginComponent {
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {
+        debugger;
+        console.log(error)
         this.errorMessage = error.message;
       },
     });

@@ -12,12 +12,14 @@ import { timestamp } from 'rxjs';
   templateUrl: './chat-sidebar.component.html',
   styleUrl: './chat-sidebar.component.css'
 })
+
 export class ChatSidebarComponent {
 
   @Input() items: any[] = [];
   @Input() isPrivateChat!: boolean;
   @Output() itemSelected = new EventEmitter<any>();
   @Output() searchQuery = new EventEmitter<string>();
+  @Output() closeChat = new EventEmitter<void>();
 
   searchText: string = '';
   userId: string | null = '';
@@ -61,8 +63,16 @@ export class ChatSidebarComponent {
   // }
 
   selectChannel(channel: any) {
-    // console.log("selected chat", channel);
-    this.itemSelected.emit(channel);
+    console.log("selected chat", channel);
+    if(this.isPrivateChat) {
+      if(this.friendList.some(friend => friend.uid === channel.uid)) {
+        this.itemSelected.emit(channel);
+      } else {
+        alert("You can only chat with your friends. Please send a friend request first!");
+      }
+    } else {
+      this.itemSelected.emit(channel);
+    }
   }
 
   onSearchChange() {
@@ -98,6 +108,8 @@ export class ChatSidebarComponent {
     this.reqServ.removeFriend(this.userId || '', item.uid).subscribe({
       next: () => {
         this.friends = this.friends.filter(id => id !== item.uid);
+        this.friendList = this.friendList.filter(friend => friend.uid !== item.uid);
+        this.closeChat.emit();
         alert("Friend removed successfully!");
       },
       error: (error) => {

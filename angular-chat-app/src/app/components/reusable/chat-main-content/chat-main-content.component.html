@@ -29,9 +29,19 @@
     </div>
   </div>
 
-  <div class="chat-input" *ngIf="isJoined || isPrivateChat">
+  <div class="chat-input" *ngIf="(isJoined && isAdmin) || isPrivateChat">
     <input type="text" (keypress)="onKeyPress($event)" [(ngModel)]="messageText" placeholder="Type a message..." />
     <input type="file" (change)="onFileSelected($event)" />
     <button (click)="sendMessage()">Send</button>
+  </div>
+
+  <p *ngIf="isJoined" class="info-text">Only Admin can send messages.</p>
+
+
+</div>
+
+<div class="chat-container" *ngIf="isPrivateChat && !selectedChannel">
+  <div class="no-chat-selected">
+    <h3>Select a friend to start chatting</h3>
   </div>
 </div>

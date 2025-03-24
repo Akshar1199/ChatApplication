@@ -8,12 +8,25 @@ import {
   getDoc,
 } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
+interface Notification {
+  type: string;
+  message: string;
+  timestamp: Date;
+}
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class RequestService {
-  constructor(private firestore: Firestore) {}
+  // private apiUrl = environment.apiUrl;
+
+  constructor(
+    private firestore: Firestore,
+    private http: HttpClient
+  ) {}
 
   sendFriendRequest(
     senderId: string | null,
@@ -185,4 +198,7 @@ export class RequestService {
     );
   }
 
+  // sendNotification(userId: string, notification: Notification): Observable<any> {
+  //   return this.http.post(`${this.apiUrl}/notifications/${userId}`, notification);
+  // }
 }

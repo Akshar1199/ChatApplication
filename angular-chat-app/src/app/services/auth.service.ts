@@ -34,11 +34,11 @@ export class AuthService {
     return docData(userDocRef, { idField: 'id' });
   }
 
-  register(email: string, password: string, userName: string): Observable<any> {
+  register(email: string, password: string, userName: string, imageUrl: string): Observable<any> {
     return from(
       createUserWithEmailAndPassword(this.auth, email, password).then(async (userCredential) => {
         const userRef = doc(this.firestore, `users/${userCredential.user.uid}`);
-        await setDoc(userRef, { userName, email, uid: userCredential.user.uid });
+        await setDoc(userRef, { userName, email, uid: userCredential.user.uid, imageUrl });
         return userCredential;
       })
     );
@@ -65,6 +65,7 @@ export class AuthService {
   login(email: string, password: string): Observable<{ userCredential: UserCredential; userName: string }> {
     return from(
       signInWithEmailAndPassword(this.auth, email, password).then(async (userCredential) => {
+
         const uid = userCredential.user.uid;
         console.log(uid);
 
@@ -81,10 +82,21 @@ export class AuthService {
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
+
           const userData = userSnap.data();
           return { userCredential, userName: userData['userName'] };
-        } else {
-          throw new Error('User data not found');
+        }
+        else {
+
+          console.log("users:",userCredential);
+          if(userCredential.user.email !== email){
+            console.log("User not found")
+            throw new Error('User data not found');
+          }
+          else{
+            console.log("User not found")
+            throw new Error('Invalid Password');
+          }
         }
       })
     );

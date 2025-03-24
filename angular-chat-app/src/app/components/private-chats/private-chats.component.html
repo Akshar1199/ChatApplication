@@ -1,7 +1,7 @@
 <div class="chat-layout">
   <div class="row">
     <div class="col-lg-3 col-md-4 col-sm-12">
-      <app-chat-sidebar [items]="users" [isPrivateChat]="true" (searchQuery)="searchUsers($event)" (itemSelected)="selectedUser($event)"></app-chat-sidebar>
+      <app-chat-sidebar [items]="users" [isPrivateChat]="true" (searchQuery)="searchUsers($event)" (itemSelected)="selectedUser($event)" (closeChat)="onCloseChat()"></app-chat-sidebar>
     </div>
 
     <div class="col-lg-9 col-md-8 col-sm-12 chat-main">

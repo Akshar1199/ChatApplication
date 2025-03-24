@@ -44,7 +44,7 @@ export class RequestsComponent {
   }
 
   acceptRequest(request: any){
-    console.log(request);
+    // console.log(request);
     this.reqServ.acceptRequest(this.userId || '', request.id).subscribe({
       next: () => {
         this.incomingRequests = this.incomingRequests.filter((r) => r.id !== request.id);
